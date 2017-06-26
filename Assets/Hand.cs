@@ -24,6 +24,8 @@ public class Hand : MonoBehaviour {
 	private Vector3 forward = new Vector3 (0, 0, 1);
 	private Vector3 right = new Vector3 (1, 0, 0);
 
+	private bool pinchIsPressed = false;
+
 	// Use this for initialization
 	void Start () {
 		pinch = false;
@@ -62,7 +64,11 @@ public class Hand : MonoBehaviour {
 	} 
 
 	private void SetPinch(string pinchState) {
-		if (pinchState == "true") {
+		SetPinch(pinchState == "true");
+	}
+
+	private void SetPinch(bool pinchState) {
+		if (pinchState) {
 			GetComponent<Renderer> ().material = red;
 			pinch = true;
 		} else {
@@ -118,6 +124,15 @@ public class Hand : MonoBehaviour {
 			}
 		}
 			
+		// Pinch
+		if (Input.GetKey (commands [8])) {
+			if (!pinchIsPressed) {
+				SetPinch (!pinch);
+			}
+			pinchIsPressed = true;
+		} else {
+			pinchIsPressed = false;
+		}
 	}
 
 	List<String> LeftHandCommands() {
@@ -130,6 +145,7 @@ public class Hand : MonoBehaviour {
 		commands.Add ("x");
 		commands.Add ("q");
 		commands.Add ("e");
+		commands.Add ("z");
 		return commands;
 	}
 
@@ -143,6 +159,7 @@ public class Hand : MonoBehaviour {
 		commands.Add (",");
 		commands.Add ("u");
 		commands.Add ("o");
+		commands.Add (".");
 		return commands;
 	}
 }
