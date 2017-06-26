@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.Networking;
 using System.Collections;
 using System.IO;
@@ -15,6 +16,9 @@ public class Hand : MonoBehaviour {
 	public Material red;
 	public bool pinch;
 	public GameObject atom;
+	public bool isRightHand;
+
+	List<String> commands;
 
 	private Vector3 up = new Vector3 (0, 1, 0);
 	private Vector3 forward = new Vector3 (0, 0, 1);
@@ -24,6 +28,12 @@ public class Hand : MonoBehaviour {
 	void Start () {
 		pinch = false;
 		atom = null;
+
+		if (isRightHand) {
+			commands = RightHandCommands ();
+		} else {
+			commands = LeftHandCommands ();
+		}
 	}
 
 	public void ParseData(string[] data) {
@@ -62,23 +72,45 @@ public class Hand : MonoBehaviour {
 	}
 
 	void Update () {
-		if (Input.GetKey ("w")) {
+		if (Input.GetKey (commands[0])) {
 			transform.Translate (forward * 0.1f);
 		}
-		if (Input.GetKey ("s")) {
+		if (Input.GetKey (commands[1])) {
 			transform.Translate (-forward * 0.1f);
 		}
-		if (Input.GetKey ("d")) {
+		if (Input.GetKey (commands[2])) {
 			transform.Translate (right * 0.1f);
 		}
-		if (Input.GetKey ("a")) {
+		if (Input.GetKey (commands[3])) {
 			transform.Translate (-right * 0.1f);
 		}
-		if (Input.GetKey ("2")) {
+		if (Input.GetKey (commands[4])) {
 			transform.Translate (up * 0.1f);
 		}
-		if (Input.GetKey ("x")) {
+		if (Input.GetKey (commands[5])) {
 			transform.Translate (-up * 0.1f);
 		}
+	}
+
+	List<String> LeftHandCommands() {
+		List<String> commands = new List<String> ();
+		commands.Add ("w");
+		commands.Add ("s");
+		commands.Add ("d");
+		commands.Add ("a");
+		commands.Add ("2");
+		commands.Add ("x");
+		return commands;
+	}
+
+	List<String> RightHandCommands() {
+		List<String> commands = new List<String> ();
+		commands.Add ("i");
+		commands.Add ("k");
+		commands.Add ("l");
+		commands.Add ("j");
+		commands.Add ("8");
+		commands.Add (",");
+		return commands;
 	}
 }
