@@ -72,24 +72,52 @@ public class Hand : MonoBehaviour {
 	}
 
 	void Update () {
-		if (Input.GetKey (commands[0])) {
-			transform.Translate (forward * 0.1f);
+		float translationSpeed = 0.1f;
+		float rotationSpeed = 3.0f;
+
+		// Translation
+		if (!Input.GetKey ("space")) {
+			if (Input.GetKey (commands [0])) {
+				transform.Translate (forward * translationSpeed);
+			}
+			if (Input.GetKey (commands [1])) {
+				transform.Translate (-forward * translationSpeed);
+			}
+			if (Input.GetKey (commands [2])) {
+				transform.Translate (right * translationSpeed);
+			}
+			if (Input.GetKey (commands [3])) {
+				transform.Translate (-right * translationSpeed);
+			}
+			if (Input.GetKey (commands [4])) {
+				transform.Translate (up * translationSpeed);
+			}
+			if (Input.GetKey (commands [5])) {
+				transform.Translate (-up * translationSpeed);
+			}
 		}
-		if (Input.GetKey (commands[1])) {
-			transform.Translate (-forward * 0.1f);
+		// Rotation
+		else {
+			if (Input.GetKey (commands [0])) {
+				transform.Rotate (new Vector3 (rotationSpeed, 0, 0));
+			}
+			if (Input.GetKey (commands [1])) {
+				transform.Rotate (new Vector3 (-rotationSpeed, 0, 0));
+			}
+			if (Input.GetKey (commands [2])) {
+				transform.Rotate (new Vector3 (0, 0, rotationSpeed));
+			}
+			if (Input.GetKey (commands [3])) {
+				transform.Rotate (new Vector3 (0, 0, -rotationSpeed));
+			}
+			if (Input.GetKey (commands [6])) {
+				transform.Rotate (new Vector3 (0, rotationSpeed, 0));
+			}
+			if (Input.GetKey (commands [7])) {
+				transform.Rotate (new Vector3 (0, -rotationSpeed, 0));
+			}
 		}
-		if (Input.GetKey (commands[2])) {
-			transform.Translate (right * 0.1f);
-		}
-		if (Input.GetKey (commands[3])) {
-			transform.Translate (-right * 0.1f);
-		}
-		if (Input.GetKey (commands[4])) {
-			transform.Translate (up * 0.1f);
-		}
-		if (Input.GetKey (commands[5])) {
-			transform.Translate (-up * 0.1f);
-		}
+			
 	}
 
 	List<String> LeftHandCommands() {
@@ -100,6 +128,8 @@ public class Hand : MonoBehaviour {
 		commands.Add ("a");
 		commands.Add ("2");
 		commands.Add ("x");
+		commands.Add ("q");
+		commands.Add ("e");
 		return commands;
 	}
 
@@ -111,6 +141,8 @@ public class Hand : MonoBehaviour {
 		commands.Add ("j");
 		commands.Add ("8");
 		commands.Add (",");
+		commands.Add ("u");
+		commands.Add ("o");
 		return commands;
 	}
 }
