@@ -16,6 +16,9 @@ public class Hand : MonoBehaviour {
 	public bool pinch;
 	public GameObject atom;
 
+	private Vector3 up = new Vector3 (0, 1, 0);
+	private Vector3 forward = new Vector3 (0, 0, 1);
+	private Vector3 right = new Vector3 (1, 0, 0);
 
 	// Use this for initialization
 	void Start () {
@@ -55,6 +58,27 @@ public class Hand : MonoBehaviour {
 		} else {
 			GetComponent<Renderer> ().material = blue;
 			pinch = false;
+		}
+	}
+
+	void Update () {
+		if (Input.GetKey ("w")) {
+			transform.Translate (forward * 0.1f);
+		}
+		if (Input.GetKey ("s")) {
+			transform.Translate (-forward * 0.1f);
+		}
+		if (Input.GetKey ("d")) {
+			transform.Translate (right * 0.1f);
+		}
+		if (Input.GetKey ("a")) {
+			transform.Translate (-right * 0.1f);
+		}
+		if (Input.GetKey ("2")) {
+			transform.Translate (up * 0.1f);
+		}
+		if (Input.GetKey ("x")) {
+			transform.Translate (-up * 0.1f);
 		}
 	}
 }
