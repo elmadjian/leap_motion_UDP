@@ -25,20 +25,27 @@ public class Network : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		data = new byte[1024];
-		host = Dns.GetHostAddresses(Dns.GetHostName())[0];
-		ipep = new IPEndPoint(host, 9988);
-		sender = new IPEndPoint (IPAddress.Any, 0);
-		socket = new UdpClient (ipep);
-		socket.Client.ReceiveTimeout = 2000;
-		bufferCount = 0;
+		try {
+			data = new byte[1024];
+			host = Dns.GetHostAddresses(Dns.GetHostName())[0];
+			ipep = new IPEndPoint(host, 9988);
+			sender = new IPEndPoint (IPAddress.Any, 0);
+			socket = new UdpClient (ipep);
+			socket.Client.ReceiveTimeout = 2000;
+			bufferCount = 0;
+		} catch (SocketException) {
+			print ("Warning: failed to initialize network.");
+		}
 	}
 
 	// Update is called once per frame
 	void Update() {
+		if (socket == null) { return; }
+
 		if (bufferCount < 30)
 			bufferCount += 1;
 		else {
+			print (socket);
 			data = socket.Receive (ref sender);
 			receivedData = Encoding.ASCII.GetString (data, 0, data.Length);
 			if (receivedData != "") {
