@@ -10,7 +10,6 @@ public class Atom : MonoBehaviour {
 	public Material yellow;
 	public Material red;
 	public float minimumProximity;
-	private bool isBeingMoved;
 
 	private List<Atom> children;
 
@@ -19,7 +18,6 @@ public class Atom : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		minimumProximity = 2.5f;
-		isBeingMoved = false;
 
 		children = new List<Atom> ();
 

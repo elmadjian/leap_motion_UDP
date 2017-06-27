@@ -13,6 +13,7 @@ using System.Text;
 public class Hand : MonoBehaviour {
 	
 	public Material blue;
+	public Material yellow;
 	public Material red;
 	public bool pinch;
 	public GameObject atom;
@@ -23,6 +24,8 @@ public class Hand : MonoBehaviour {
 	private Vector3 up = new Vector3 (0, 1, 0);
 	private Vector3 forward = new Vector3 (0, 0, 1);
 	private Vector3 right = new Vector3 (1, 0, 0);
+
+	private GameObject highlightedAtom;
 
 	private bool pinchIsPressed = false;
 
@@ -53,6 +56,8 @@ public class Hand : MonoBehaviour {
 		float z = Convert.ToSingle (pos_data [2], CultureInfo.InvariantCulture);
 		Vector3 pos = new Vector3 (x, y, z);
 		transform.localPosition = pos;
+
+		UpdateAtomHighlights ();
 	}
 
 	private void SetRotation(string[] rot_data) {
@@ -113,10 +118,36 @@ public class Hand : MonoBehaviour {
 		this.atom.GetComponent<Renderer> ().material = blue;
 		this.atom = null;
 	}
-		
+
+	private void UpdateAtomHighlights () {
+		if (this.atom == null) {
+			foreach (Atom anAtom in Atom.allAtoms) {
+				float distance = Vector3.Distance (transform.position, anAtom.transform.position);
+				if (distance <= anAtom.minimumProximity) {
+					SetColorInAtom (yellow, anAtom.gameObject);
+				} else {
+					SetColorInAtom (blue, anAtom.gameObject);
+				}
+			}
+		}
+	}
+
+	private void SetColorInAtom(Material material, GameObject atom) {
+		Renderer atomRenderer = atom.GetComponent<Renderer> ();
+		if (atomRenderer.material != material) {
+			atomRenderer.material = material;
+		}
+	}
+
 	void Update () {
 		HandleKeyPresses ();
 		HandleAtoms ();
+	}
+
+	void LateUpdate() {
+		if (this.atom != null) {
+			SetColorInAtom (red, this.atom);
+		}
 	}
 
 	private void HandleAtoms () {
@@ -133,22 +164,22 @@ public class Hand : MonoBehaviour {
 		// Translation
 		if (!Input.GetKey ("space")) {
 			if (Input.GetKey (commands [0])) {
-				transform.position += forward * translationSpeed;
+				Translate (forward * translationSpeed);
 			}
 			if (Input.GetKey (commands [1])) {
-				transform.position += -forward * translationSpeed;
+				Translate (-forward * translationSpeed);
 			}
 			if (Input.GetKey (commands [2])) {
-				transform.position += right * translationSpeed;
+				Translate (right * translationSpeed);
 			}
 			if (Input.GetKey (commands [3])) {
-				transform.position += -right * translationSpeed;
+				Translate (-right * translationSpeed);
 			}
 			if (Input.GetKey (commands [4])) {
-				transform.position += up * translationSpeed;
+				Translate (up * translationSpeed);
 			}
 			if (Input.GetKey (commands [5])) {
-				transform.position += -up * translationSpeed;
+				Translate (-up * translationSpeed);
 			}
 		}
 		// Rotation
@@ -182,6 +213,11 @@ public class Hand : MonoBehaviour {
 		} else {
 			pinchIsPressed = false;
 		}
+	}
+
+	private void Translate (Vector3 vector) {
+		transform.position += vector;
+		UpdateAtomHighlights ();
 	}
 
 	private List<String> LeftHandCommands() {
