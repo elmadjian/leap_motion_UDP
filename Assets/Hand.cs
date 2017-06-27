@@ -25,7 +25,7 @@ public class Hand : MonoBehaviour {
 	private Vector3 forward = new Vector3 (0, 0, 1);
 	private Vector3 right = new Vector3 (1, 0, 0);
 
-	private GameObject highlightedAtom;
+	private Atom closestAtom;
 
 	private bool pinchIsPressed = false;
 
@@ -56,8 +56,6 @@ public class Hand : MonoBehaviour {
 		float z = Convert.ToSingle (pos_data [2], CultureInfo.InvariantCulture);
 		Vector3 pos = new Vector3 (x, y, z);
 		transform.localPosition = pos;
-
-		UpdateAtomHighlights ();
 	}
 
 	private void SetRotation(string[] rot_data) {
@@ -90,11 +88,18 @@ public class Hand : MonoBehaviour {
 		float smallestDistance = float.PositiveInfinity;
 		Atom closestAtom = null;
 		foreach (Atom anAtom in Atom.allAtoms) {
+			// Ignore atoms being held by the other hand.
+			if (anAtom.IsBeingHeld () && anAtom != this.atom) {
+				continue;
+			}
+
 			float distance = Vector3.Distance (transform.position, anAtom.transform.position);
+
 			// If we're grabbing further than the atom's proximity boundary, ignore it
 			if (distance > anAtom.minimumProximity) {
 				continue;
 			}
+				
 			// If this is the closest atom so far
 			if (distance < smallestDistance) {
 				smallestDistance = distance;
@@ -102,34 +107,24 @@ public class Hand : MonoBehaviour {
 			}
 		}
 
+		foreach (Atom anAtom in Atom.allAtoms) {
+			anAtom.SetIsClosest (isRightHand, closestAtom == anAtom);
+		}
+
 		return closestAtom;
 	}
 
 	private void GrabAtom () {
-		Atom closestAtom = FindClosestAtom ();
-
 		if (closestAtom != null) {
+			closestAtom.SetIsBeingHeld(true);
 			this.atom = closestAtom.gameObject;
 			this.atom.GetComponent<Renderer> ().material = red;
 		}
 	}
 
 	private void ReleaseAtom () {
-		this.atom.GetComponent<Renderer> ().material = blue;
+		this.atom.GetComponent<Atom> ().SetIsBeingHeld(false);
 		this.atom = null;
-	}
-
-	private void UpdateAtomHighlights () {
-		if (this.atom == null) {
-			foreach (Atom anAtom in Atom.allAtoms) {
-				float distance = Vector3.Distance (transform.position, anAtom.transform.position);
-				if (distance <= anAtom.minimumProximity) {
-					SetColorInAtom (yellow, anAtom.gameObject);
-				} else {
-					SetColorInAtom (blue, anAtom.gameObject);
-				}
-			}
-		}
 	}
 
 	private void SetColorInAtom(Material material, GameObject atom) {
@@ -142,11 +137,9 @@ public class Hand : MonoBehaviour {
 	void Update () {
 		HandleKeyPresses ();
 		HandleAtoms ();
-	}
 
-	void LateUpdate() {
-		if (this.atom != null) {
-			SetColorInAtom (red, this.atom);
+		if (atom == null) {
+			closestAtom = FindClosestAtom ();
 		}
 	}
 
@@ -217,7 +210,6 @@ public class Hand : MonoBehaviour {
 
 	private void Translate (Vector3 vector) {
 		transform.position += vector;
-		UpdateAtomHighlights ();
 	}
 
 	private List<String> LeftHandCommands() {
