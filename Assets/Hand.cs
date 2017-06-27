@@ -82,28 +82,30 @@ public class Hand : MonoBehaviour {
 	}
 
 	private void GrabAtom () {
-//		//Test distance between atom and hand
-//		if (Vector3.Distance (rht.position, transform.position) < proximity) {
-//			GetComponent<Renderer> ().material = yellow;
-//			//get the atom
-//			Hand hstate = rhand.GetComponent<Hand>();
-//			if (hstate.pinch && (hstate.atom == null || hstate.atom == gameObject)) {
-//				isBeingMoved = true;
-//				GetComponent<Renderer> ().material = red;
-//				transform.position = rht.position;
-//				transform.rotation = rht.rotation;
-//				hstate.atom = gameObject;
-//				//release the atom
-//			} else if (isBeingMoved) {
-//				isBeingMoved = false;
-//				hstate.atom = null;
-//			}
-//		} else {
-//			GetComponent<Renderer> ().material = blue;
-//		}
+		float smallestDistance = float.PositiveInfinity;
+		Atom closestAtom = null;
+		foreach (Atom anAtom in Atom.allAtoms) {
+			float distance = Vector3.Distance (transform.position, anAtom.transform.position);
+			// If we're grabbing further than the atom's proximity boundary, ignore it
+			if (distance > anAtom.minimumProximity) {
+				continue;
+			}
+			// If this is the closets atom so far
+			if (distance < smallestDistance) {
+				smallestDistance = distance;
+				closestAtom = anAtom;
+			}
+		}
+
+		if (closestAtom != null) {
+			this.atom = closestAtom.gameObject;
+			this.atom.GetComponent<Renderer> ().material = red;
+		}
 	}
 
 	private void ReleaseAtom () {
+		this.atom.GetComponent<Renderer> ().material = blue;
+		this.atom = null;
 	}
 		
 	void Update () {
@@ -112,25 +114,10 @@ public class Hand : MonoBehaviour {
 	}
 
 	private void HandleAtoms () {
-//		//Test distance between atom and hand
-//		if (Vector3.Distance (rht.position, transform.position) < proximity) {
-//			GetComponent<Renderer> ().material = yellow;
-//			//get the atom
-//			Hand hstate = rhand.GetComponent<Hand>();
-//			if (hstate.pinch && (hstate.atom == null || hstate.atom == gameObject)) {
-//				isBeingMoved = true;
-//				GetComponent<Renderer> ().material = red;
-//				transform.position = rht.position;
-//				transform.rotation = rht.rotation;
-//				hstate.atom = gameObject;
-//				//release the atom
-//			} else if (isBeingMoved) {
-//				isBeingMoved = false;
-//				hstate.atom = null;
-//			}
-//		} else {
-//			GetComponent<Renderer> ().material = blue;
-//		}
+		if (this.atom != null) {
+			atom.transform.position = transform.position;
+			atom.transform.rotation = transform.rotation;
+		}
 	}
 
 	private void HandleKeyPresses () {
