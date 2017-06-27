@@ -68,16 +68,72 @@ public class Hand : MonoBehaviour {
 	}
 
 	private void SetPinch(bool pinchState) {
+		if (pinch == pinchState) { return; }
+
 		if (pinchState) {
 			GetComponent<Renderer> ().material = red;
 			pinch = true;
+			GrabAtom ();
 		} else {
 			GetComponent<Renderer> ().material = blue;
 			pinch = false;
+			ReleaseAtom ();
 		}
 	}
 
+	private void GrabAtom () {
+//		//Test distance between atom and hand
+//		if (Vector3.Distance (rht.position, transform.position) < proximity) {
+//			GetComponent<Renderer> ().material = yellow;
+//			//get the atom
+//			Hand hstate = rhand.GetComponent<Hand>();
+//			if (hstate.pinch && (hstate.atom == null || hstate.atom == gameObject)) {
+//				isBeingMoved = true;
+//				GetComponent<Renderer> ().material = red;
+//				transform.position = rht.position;
+//				transform.rotation = rht.rotation;
+//				hstate.atom = gameObject;
+//				//release the atom
+//			} else if (isBeingMoved) {
+//				isBeingMoved = false;
+//				hstate.atom = null;
+//			}
+//		} else {
+//			GetComponent<Renderer> ().material = blue;
+//		}
+	}
+
+	private void ReleaseAtom () {
+	}
+		
 	void Update () {
+		HandleKeyPresses ();
+		HandleAtoms ();
+	}
+
+	private void HandleAtoms () {
+//		//Test distance between atom and hand
+//		if (Vector3.Distance (rht.position, transform.position) < proximity) {
+//			GetComponent<Renderer> ().material = yellow;
+//			//get the atom
+//			Hand hstate = rhand.GetComponent<Hand>();
+//			if (hstate.pinch && (hstate.atom == null || hstate.atom == gameObject)) {
+//				isBeingMoved = true;
+//				GetComponent<Renderer> ().material = red;
+//				transform.position = rht.position;
+//				transform.rotation = rht.rotation;
+//				hstate.atom = gameObject;
+//				//release the atom
+//			} else if (isBeingMoved) {
+//				isBeingMoved = false;
+//				hstate.atom = null;
+//			}
+//		} else {
+//			GetComponent<Renderer> ().material = blue;
+//		}
+	}
+
+	private void HandleKeyPresses () {
 		float translationSpeed = 0.1f;
 		float rotationSpeed = 3.0f;
 
@@ -123,7 +179,7 @@ public class Hand : MonoBehaviour {
 				transform.Rotate (new Vector3 (0, -rotationSpeed, 0));
 			}
 		}
-			
+
 		// Pinch
 		if (Input.GetKey (commands [8])) {
 			if (!pinchIsPressed) {
@@ -135,7 +191,7 @@ public class Hand : MonoBehaviour {
 		}
 	}
 
-	List<String> LeftHandCommands() {
+	private List<String> LeftHandCommands() {
 		List<String> commands = new List<String> ();
 		commands.Add ("w");
 		commands.Add ("s");
@@ -149,7 +205,7 @@ public class Hand : MonoBehaviour {
 		return commands;
 	}
 
-	List<String> RightHandCommands() {
+	private List<String> RightHandCommands() {
 		List<String> commands = new List<String> ();
 		commands.Add ("i");
 		commands.Add ("k");

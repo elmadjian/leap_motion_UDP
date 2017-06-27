@@ -2,5 +2,6 @@
 Library/
 ProjectSettings/
 Temp/
+obj/
 *.userprefs
 
