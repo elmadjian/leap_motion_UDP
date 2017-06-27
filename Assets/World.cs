@@ -24,7 +24,7 @@ public class World : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if (rh.pinch && lh.pinch) {
+		if (rh.pinch && lh.pinch && lh.atom == null && rh.atom == null) {
 			Debug.Log (rh.pinch + " " + lh.pinch);
 			if (!start) {
 				direction = lht.position - rht.position;
