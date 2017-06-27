@@ -81,7 +81,7 @@ public class Hand : MonoBehaviour {
 		}
 	}
 
-	private void GrabAtom () {
+	private Atom FindClosestAtom() {
 		float smallestDistance = float.PositiveInfinity;
 		Atom closestAtom = null;
 		foreach (Atom anAtom in Atom.allAtoms) {
@@ -90,12 +90,18 @@ public class Hand : MonoBehaviour {
 			if (distance > anAtom.minimumProximity) {
 				continue;
 			}
-			// If this is the closets atom so far
+			// If this is the closest atom so far
 			if (distance < smallestDistance) {
 				smallestDistance = distance;
 				closestAtom = anAtom;
 			}
 		}
+
+		return closestAtom;
+	}
+
+	private void GrabAtom () {
+		Atom closestAtom = FindClosestAtom ();
 
 		if (closestAtom != null) {
 			this.atom = closestAtom.gameObject;
