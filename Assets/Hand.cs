@@ -127,22 +127,22 @@ public class Hand : MonoBehaviour {
 		// Translation
 		if (!Input.GetKey ("space")) {
 			if (Input.GetKey (commands [0])) {
-				transform.Translate (forward * translationSpeed);
+				transform.position += forward * translationSpeed;
 			}
 			if (Input.GetKey (commands [1])) {
-				transform.Translate (-forward * translationSpeed);
+				transform.position += -forward * translationSpeed;
 			}
 			if (Input.GetKey (commands [2])) {
-				transform.Translate (right * translationSpeed);
+				transform.position += right * translationSpeed;
 			}
 			if (Input.GetKey (commands [3])) {
-				transform.Translate (-right * translationSpeed);
+				transform.position += -right * translationSpeed;
 			}
 			if (Input.GetKey (commands [4])) {
-				transform.Translate (up * translationSpeed);
+				transform.position += up * translationSpeed;
 			}
 			if (Input.GetKey (commands [5])) {
-				transform.Translate (-up * translationSpeed);
+				transform.position += -up * translationSpeed;
 			}
 		}
 		// Rotation
