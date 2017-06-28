@@ -2,13 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-// TODO: Always move realtive to root atom
 // TODO: Allow removing atoms
-// TODO: Create visible connections
 
 public class Atom : MonoBehaviour {
 
-	public static float minimumConnectionProximity = 2.5f;
+	public static float minimumConnectionProximity = 5;
 
 	public GameObject link;
 	public Hand rhand;
@@ -37,7 +35,8 @@ public class Atom : MonoBehaviour {
 
 		allAtoms.Add (this);
 
-		link.transform.position = new Vector3 ();
+		link.transform.localPosition = new Vector3 (0, 1, 0);
+		link.transform.localRotation = new Quaternion();
 		link.GetComponent<Renderer> ().enabled = false;
 	}
 
@@ -57,6 +56,7 @@ public class Atom : MonoBehaviour {
 		parent.setParent (this);
 
 		parent = null;
+		updateLink ();
 	}
 
 	public bool IsBeingHeld() {
@@ -96,6 +96,7 @@ public class Atom : MonoBehaviour {
 		float distance = Vector3.Distance (transform.position, otherAtom.transform.position);
 		if (distance <= minimumConnectionProximity) {
 			otherAtom.setParent (this);
+			updateLink ();
 		}
 	}
 
@@ -112,6 +113,21 @@ public class Atom : MonoBehaviour {
 		this.transform.SetParent (newParent.transform, true);
 		newParent.children.Add (this);
 		this.children.Remove (newParent);
+
+		updateLink ();
+	}
+
+	private void updateLink() {
+		if (parent == null) {
+			link.GetComponent<Renderer> ().enabled = false;
+		} else {
+			link.GetComponent<Renderer> ().enabled = true;
+			Vector3 relativePos = parent.transform.position - this.transform.position;
+			Quaternion rotation = Quaternion.LookRotation(relativePos);
+			link.transform.rotation = rotation;
+			Vector3 position = rotation * new Vector3 (0, 0, 1);
+			link.transform.localPosition = position;
+		}
 	}
 
 	private Atom getOtherHeldAtom () {
@@ -133,7 +149,7 @@ public class Atom : MonoBehaviour {
 		return otherAtom;
 	}
 
-	void UpdateHighlights () {
+	private void UpdateHighlights () {
 		if (isBeingHeld) {
 			return;
 		}
@@ -143,5 +159,9 @@ public class Atom : MonoBehaviour {
 		} else {
 			GetComponent<Renderer> ().material = blue;
 		}
+	}
+
+	void Update () {
+		updateLink ();
 	}
 }
