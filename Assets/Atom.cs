@@ -2,6 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// TODO: Always move realtive to root atom
+// TODO: Allow removing atoms
+// TODO: Create visible connections
+
 public class Atom : MonoBehaviour {
 
 	public static float minimumConnectionProximity = 2.5f;
@@ -31,6 +35,24 @@ public class Atom : MonoBehaviour {
 		children = new List<Atom> ();
 
 		allAtoms.Add (this);
+	}
+
+	public Atom rootAtom() {
+		if (parent == null) {
+			return this;
+		}
+
+		return parent.rootAtom ();
+	}
+
+	public void makeRoot() {
+		if (parent == null) {
+			return;
+		}
+
+		parent.setParent (this);
+
+		parent = null;
 	}
 
 	public bool IsBeingHeld() {
@@ -70,18 +92,22 @@ public class Atom : MonoBehaviour {
 		float distance = Vector3.Distance (transform.position, otherAtom.transform.position);
 		if (distance <= minimumConnectionProximity) {
 			otherAtom.setParent (this);
-			otherAtom.transform.SetParent (this.transform, true);
-			children.Add (otherAtom);
 		}
 	}
 
 	private void setParent(Atom newParent) {
 		if (parent != null) {
-			parent.setParent (this);
-			children.Add (parent);
+			if (parent.gameObject.GetInstanceID () != newParent.gameObject.GetInstanceID ()) {
+				return;
+			} else {
+				parent.setParent (this);
+			}
 		}
 		this.parent = newParent;
-		parent.transform.SetParent (this.transform, true);
+		newParent.transform.parent = null;
+		this.transform.SetParent (newParent.transform, true);
+		newParent.children.Add (this);
+		this.children.Remove (newParent);
 	}
 
 	private Atom getOtherHeldAtom () {

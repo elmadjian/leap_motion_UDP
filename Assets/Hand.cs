@@ -145,8 +145,9 @@ public class Hand : MonoBehaviour {
 
 	private void HandleAtoms () {
 		if (this.atom != null) {
-			atom.transform.position = transform.position;
-			atom.transform.rotation = transform.rotation;
+			this.atom.GetComponent<Atom> ().makeRoot ();
+			this.atom.transform.position = this.transform.position;
+			this.atom.transform.rotation = transform.rotation;
 		}
 	}
 
