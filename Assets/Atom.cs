@@ -10,6 +10,7 @@ public class Atom : MonoBehaviour {
 
 	public static float minimumConnectionProximity = 2.5f;
 
+	public GameObject link;
 	public Hand rhand;
 	public Hand lhand;
 	public Material blue;
@@ -35,6 +36,9 @@ public class Atom : MonoBehaviour {
 		children = new List<Atom> ();
 
 		allAtoms.Add (this);
+
+		link.transform.position = new Vector3 ();
+		link.GetComponent<Renderer> ().enabled = false;
 	}
 
 	public Atom rootAtom() {

@@ -13,6 +13,7 @@ using System.Text;
 public class Hand : MonoBehaviour {
 	
 	public Material selected;
+	public Material highlighted;
 	public Material unselected;
 	public bool pinch;
 	public GameObject atom;
@@ -119,7 +120,7 @@ public class Hand : MonoBehaviour {
 		if (closestAtom != null) {
 			closestAtom.SetIsBeingHeld(true);
 			this.atom = closestAtom.gameObject;
-			this.atom.GetComponent<Renderer> ().material = red;
+			this.atom.GetComponent<Renderer> ().material = selected;
 		}
 	}
 
