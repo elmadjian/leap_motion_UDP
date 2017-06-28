@@ -19,6 +19,8 @@ public class Network : MonoBehaviour {
 	IPEndPoint ipep;
 	IPEndPoint sender;
 	string receivedData;
+	string[] leftHandData;
+	string[] rightHandData;
 
 	public GameObject rightHand;
 	public GameObject leftHand;
@@ -27,34 +29,37 @@ public class Network : MonoBehaviour {
 	void Start () {
 		try {
 			data = new byte[1024];
-			host = Dns.GetHostAddresses(Dns.GetHostName())[0];
-			ipep = new IPEndPoint(host, 9988);
 			sender = new IPEndPoint (IPAddress.Any, 0);
-			socket = new UdpClient (ipep);
+			socket = new UdpClient(9988);
 			socket.Client.ReceiveTimeout = 2000;
 			bufferCount = 0;
+			Thread connection = new Thread(new ThreadStart(ProcessConnection));
+			connection.Start();
 		} catch (SocketException) {
 			print ("Warning: failed to initialize network.");
 		}
 	}
 
-	// Update is called once per frame
-	void Update() {
-		if (socket == null) { return; }
-
-		if (bufferCount < 30)
-			bufferCount += 1;
-		else {
-			print (socket);
+	private void ProcessConnection() {
+		while (true) {
+			if (socket == null)
+				return;
 			data = socket.Receive (ref sender);
 			receivedData = Encoding.ASCII.GetString (data, 0, data.Length);
+			//Debug.Log (receivedData);
 			if (receivedData != "") {
 				string[] rawdata = receivedData.Split (';');
 				if (rawdata [0] == "right")
-					rightHand.GetComponent<Hand> ().ParseData (rawdata);
+					this.rightHandData = rawdata;
 				else if (rawdata [0] == "left")
-					leftHand.GetComponent<Hand> ().ParseData (rawdata);
+					this.leftHandData = rawdata;
 			}
 		}
+	}
+
+	// Update is called once per frame
+	void Update() {
+		rightHand.GetComponent<Hand> ().ParseData (rightHandData);
+		leftHand.GetComponent<Hand> ().ParseData (leftHandData);
 	}
 }

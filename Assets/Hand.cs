@@ -12,9 +12,8 @@ using System.Text;
 
 public class Hand : MonoBehaviour {
 	
-	public Material blue;
-	public Material yellow;
-	public Material red;
+	public Material selected;
+	public Material unselected;
 	public bool pinch;
 	public GameObject atom;
 	public bool isRightHand;
@@ -42,12 +41,14 @@ public class Hand : MonoBehaviour {
 	}
 
 	public void ParseData(string[] data) {
-		string[] pos_data = data [1].Split (',');
-		string[] rot_data = data [2].Split (',');
-		string pinchState = data [3];
-		SetPosition (pos_data);
-		SetRotation (rot_data);
-		SetPinch (pinchState);
+		if (data != null) {
+			string[] pos_data = data [1].Split (',');
+			string[] rot_data = data [2].Split (',');
+			string pinchState = data [3];
+			SetPosition (pos_data);
+			SetRotation (rot_data);
+			SetPinch (pinchState);
+		}
 	}
 
 	private void SetPosition(string[] pos_data) {
@@ -74,11 +75,11 @@ public class Hand : MonoBehaviour {
 		if (pinch == pinchState) { return; }
 
 		if (pinchState) {
-			GetComponent<Renderer> ().material = red;
+			GetComponent<Renderer> ().material = selected;
 			pinch = true;
 			GrabAtom ();
 		} else {
-			GetComponent<Renderer> ().material = blue;
+			GetComponent<Renderer> ().material = unselected;
 			pinch = false;
 			ReleaseAtom ();
 		}
