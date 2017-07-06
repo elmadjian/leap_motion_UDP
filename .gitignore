@@ -1,7 +1,7 @@
 .DS_Store
 Library/
-ProjectSettings/
 Temp/
 obj/
 *.userprefs
+build*
 
