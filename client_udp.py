@@ -90,7 +90,7 @@ class SampleListener(Leap.Listener):
                 pinch    = self.get_pinch_state(hand)
                 tosend = htype+";"+position+";"+rotation+";"+pinch
                 self.throughput += 1
-                if self.throughput == 7:
+                if self.throughput == 5:
                     self.throughput = 0
                     self.socket.sendto(tosend.encode(), self.host)
                 if self.prev_lframe is None and hand.is_left:
@@ -107,13 +107,15 @@ def run(host):
     listener.set_socket(client_sock, server_address)
     controller = Leap.Controller()
     controller.add_listener(listener)
-    print "press Enter to quit"
-    try:
-        sys.stdin.readline()
-    except KeyboardInterrupt:
-        pass
-    finally:
-        controller.remove_listener(listener)
+    print "press 'q' to quit and 's[0-9][0-9]' to select a scene"
+    while True:
+        entry = sys.stdin.readline()
+        if entry.startswith('q'):
+            break
+        elif entry.startswith('s'):
+            tosend = 'scene;' + entry[:-1]
+            client_sock.sendto(tosend.encode(), server_address)
+    controller.remove_listener(listener)
 
 
 

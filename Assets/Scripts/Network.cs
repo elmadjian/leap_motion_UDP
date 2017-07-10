@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.Networking;
+using UnityEngine.SceneManagement;
 using System.Collections;
 using System.IO;
 using System.Net.Sockets;
@@ -22,12 +23,14 @@ public class Network : MonoBehaviour {
 	string[] leftHandData;
 	string[] rightHandData;
 
+	private string sceneToLoad;
 	public GameObject rightHand;
 	public GameObject leftHand;
 
 	// Use this for initialization
 	void Start () {
 		try {
+			sceneToLoad = "";
 			data = new byte[1024];
 			sender = new IPEndPoint (IPAddress.Any, 0);
 			socket = new UdpClient(9988);
@@ -54,6 +57,10 @@ public class Network : MonoBehaviour {
 						this.rightHandData = rawdata;
 					else if (rawdata [0] == "left")
 						this.leftHandData = rawdata;
+					else if (rawdata[0] == "scene") {
+						this.sceneToLoad = rawdata[1];
+						break;
+					}
 				}
 			} catch(SocketException) {
 				this.bufferCount--;
@@ -68,5 +75,34 @@ public class Network : MonoBehaviour {
 	void Update() {
 		rightHand.GetComponent<Hand> ().ParseData (rightHandData);
 		leftHand.GetComponent<Hand> ().ParseData (leftHandData);
+		if (sceneToLoad != "") {
+			string scene = sceneToLoad;
+			sceneToLoad = "";
+			socket.Close ();
+			LoadScene (scene);
+		}
+	}
+
+
+	private void LoadScene(string scene) {
+		switch(scene) {
+		case "s11":
+			SceneManager.LoadSceneAsync ("interaction_1_1");
+			break;
+		case "s12":
+			SceneManager.LoadSceneAsync ("interaction_1_2");
+			break;
+		case "s21":
+			SceneManager.LoadSceneAsync ("interaction_2_1");
+			break;
+		case "s22":
+			SceneManager.LoadSceneAsync ("interaction_2_2");
+			break;
+		case "s3":
+			SceneManager.LoadSceneAsync ("interaction_3");
+			break;
+		default:
+			break;
+		}
 	}
 }
