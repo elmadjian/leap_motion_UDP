@@ -30,7 +30,7 @@ public class Molecule : MonoBehaviour {
 		Transform lht = leftHand.GetComponent<Transform> ();
 		selected = true;
 		if ((rightPinch || leftPinch) && !(rightPinch && leftPinch)) {
-			//Debug.Log (Vector3.Distance (rht.position, transform.position));
+			Debug.Log (Vector3.Distance (rht.position, transform.position));
 			if (Vector3.Distance (rht.position, transform.position) < proximity) {
 				transform.position = rht.position;
 				transform.rotation = rht.rotation * rotation;

@@ -40,8 +40,8 @@ public class Atom : MonoBehaviour {
 			//get the atom
 			if (hstate.pinch && (hstate.atom == null || hstate.atom == gameObject) && !mol.selected) {
 				GetComponent<Renderer> ().material = selected;
-				transform.position = ht.position;
-				transform.rotation = ht.rotation;
+				//transform.position = ht.position;
+				//transform.rotation = ht.rotation;
 				hstate.atom = gameObject;
 				//release the atom
 			} else {
