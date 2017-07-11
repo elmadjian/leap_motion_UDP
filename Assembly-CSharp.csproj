@@ -6,7 +6,7 @@
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <RootNamespace></RootNamespace>
-    <ProjectGuid>{01C7DB89-158F-6918-17EA-3FCD4A56ED48}</ProjectGuid>
+    <ProjectGuid>{A199D6FA-0E68-74FD-FA7D-B5B1F40E68C8}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <AssemblyName>Assembly-CSharp</AssemblyName>
@@ -48,6 +48,7 @@
   <ItemGroup>
      <Compile Include="Assets\Scripts\Atom.cs" />
      <Compile Include="Assets\Scripts\Atom2.cs" />
+     <Compile Include="Assets\Scripts\ConnectedAtom.cs" />
      <Compile Include="Assets\Scripts\Connection.cs" />
      <Compile Include="Assets\Scripts\Hand.cs" />
      <Compile Include="Assets\Scripts\Hand2.cs" />
@@ -93,14 +94,14 @@
      <None Include="Assets\Vuforia\Shaders\ColoredLines.shader" />
      <None Include="Assets\link.xml" />
      <None Include="Assets\Vuforia\Shaders\VertexLitWithZ.shader" />
+     <None Include="Assets\StreamingAssets\Vuforia\Stereochemistry.xml" />
      <None Include="Assets\Vuforia\Shaders\RenderVideoBackground.shader" />
      <None Include="Assets\readme_SDK.txt" />
-     <None Include="Assets\Editor\Vuforia\CylinderTargetTextures\stereochemistry\authoringinfo.xml" />
      <None Include="Assets\Vuforia\Shaders\VideoBackground.shader" />
-     <None Include="Assets\StreamingAssets\Vuforia\stereochemistry.xml" />
      <None Include="Assets\license_3rdpartynotice.txt" />
      <None Include="Assets\Vuforia\Editor\WebcamProfiles\profiles.xml" />
      <None Include="Assets\Vuforia\Shaders\DepthMask.shader" />
+     <None Include="Assets\Editor\Vuforia\CylinderTargetTextures\stereochemistry\authoringinfo.xml" />
      <None Include="Assets\Vuforia\Shaders\ClippingMask.shader" />
      <None Include="Assets\Vuforia\Shaders\BrightTexture.shader" />
      <None Include="Assets\Vuforia\Shaders\Text3D.shader" />
@@ -126,7 +127,7 @@
  <HintPath>/Applications/Unity/Unity.app/Contents/UnityExtensions/Unity/UnityVR/RuntimeEditor/UnityEngine.VR.dll</HintPath>
  </Reference>
  <Reference Include="Vuforia.UnityExtensions">
- <HintPath>/Users/vini/Desktop/StereochemistryAR/Assets/Vuforia/Scripts/Internal/Vuforia.UnityExtensions.dll</HintPath>
+ <HintPath>/Users/vini/Documents/Academic/3D Interaction/Chemistry/Assets/Vuforia/Scripts/Internal/Vuforia.UnityExtensions.dll</HintPath>
  </Reference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
