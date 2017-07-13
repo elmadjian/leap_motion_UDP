@@ -28,9 +28,21 @@ public class ConnectedAtom : MonoBehaviour {
 	void Update () {
 		bool rhandState = Manipulate (rhand);
 		bool lhandState = Manipulate (lhand);
+
 		if (!rhandState && !lhandState) {
 			GetComponent<Renderer> ().material = unselected;
 			halo.enabled = false;
+		}
+
+		if (this.state == State.RecentlyAttached) {
+			Transform lht = lhand.GetComponent<Transform> ();
+			Transform rht = rhand.GetComponent<Transform> ();
+			if (Vector3.Distance (lht.position, transform.position) > proximity &&
+			    Vector3.Distance (rht.position, transform.position) > proximity) {
+
+				this.state = State.Selectable;
+				print ("Recently Attached -> Selectable");
+			}
 		}
 	}
 
@@ -88,6 +100,7 @@ public class ConnectedAtom : MonoBehaviour {
 							// attach the atom automatically
 							print ("Attaching!");
 							hstate.atom = null;
+							return true;
 						}
 					}
 				}
