@@ -18,7 +18,7 @@ public class ConnectedAtom : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		proximity = 5f;
+		proximity = 2.5f;
 		halo = (Behaviour)GetComponent ("Halo");
 		halo.enabled = false;
 		//connection.SetActive (false);
