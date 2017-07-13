@@ -107,7 +107,7 @@ def run(host):
     listener.set_socket(client_sock, server_address)
     controller = Leap.Controller()
     controller.add_listener(listener)
-    print "press 'q' to quit and 's[0-9][0-9]' to select a scene"
+    print "press 'q' to quit OR 's[0-9]{2-3}' to select a scene"
     while True:
         entry = sys.stdin.readline()
         if entry.startswith('q'):
@@ -121,5 +121,8 @@ def run(host):
 
 
 if __name__=="__main__":
+    if len(sys.argv) != 2:
+        print "usage: <this_program> <host_IP>"
+        sys.exit()
     host = sys.argv[1]
     run(host)
