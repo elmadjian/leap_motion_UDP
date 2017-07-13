@@ -55,18 +55,18 @@
      <None Include="Assets\Vuforia\Shaders\ColoredLines.shader" />
      <None Include="Assets\link.xml" />
      <None Include="Assets\Vuforia\Shaders\VertexLitWithZ.shader" />
+     <None Include="Assets\StreamingAssets\Vuforia\Stereochemistry-scaled.xml" />
      <None Include="Assets\Vuforia\Shaders\RenderVideoBackground.shader" />
      <None Include="Assets\readme_SDK.txt" />
      <None Include="Assets\Editor\Vuforia\CylinderTargetTextures\stereochemistry\authoringinfo.xml" />
-     <None Include="Assets\Editor\Vuforia\CylinderTargetTextures\Stereochemistry-scaled\authoringinfo.xml" />
      <None Include="Assets\Vuforia\Shaders\VideoBackground.shader" />
      <None Include="Assets\license_3rdpartynotice.txt" />
      <None Include="Assets\Vuforia\Editor\WebcamProfiles\profiles.xml" />
      <None Include="Assets\Vuforia\Shaders\DepthMask.shader" />
-     <None Include="Assets\StreamingAssets\Vuforia\Stereochemistry-scaled.xml" />
      <None Include="Assets\Vuforia\Shaders\ClippingMask.shader" />
      <None Include="Assets\Vuforia\Shaders\BrightTexture.shader" />
      <None Include="Assets\StreamingAssets\Vuforia\stereochemistry.xml" />
+     <None Include="Assets\Editor\Vuforia\CylinderTargetTextures\Stereochemistry-scaled\authoringinfo.xml" />
      <None Include="Assets\Vuforia\Shaders\Text3D.shader" />
  <Reference Include="Assembly-UnityScript-Editor-firstpass">
  <HintPath>/Users/vini/Documents/Academic/3D Interaction/Chemistry/Library/ScriptAssemblies/Assembly-UnityScript-Editor-firstpass.dll</HintPath>
