@@ -11,7 +11,9 @@ using System.Globalization;
 using System.Text;
 
 public class Hand : MonoBehaviour {
-	
+
+	public bool isMarkerBased = false;
+
 	public Material selected;
 	public Material unselected;
 	public bool pinch;
@@ -28,7 +30,13 @@ public class Hand : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		pinch = false;
+
+		if (isMarkerBased) {
+			pinch = true;
+		} else {
+			pinch = false;
+		}
+
 		atom = null;
 
 		if (isRightHand) {
@@ -63,13 +71,21 @@ public class Hand : MonoBehaviour {
 		float z = Convert.ToSingle (rot_data [2], CultureInfo.InvariantCulture);
 		Quaternion target = Quaternion.Euler(x, y, z);
 		transform.rotation = target;
-	} 
+	}
 
 	private void SetPinch(string pinchState) {
+		if (isMarkerBased) {
+			return;
+		}
+
 		SetPinch(pinchState == "true");
 	}
 
 	private void SetPinch(bool pinchState) {
+		if (isMarkerBased) {
+			return;
+		}
+
 		if (pinchState) {
 			GetComponent<Renderer> ().material = selected;
 			pinch = true;
@@ -80,7 +96,7 @@ public class Hand : MonoBehaviour {
 	}
 
 	void Update () {
-		float translationSpeed = 0.1f;
+		float translationSpeed = 0.4f;
 		float rotationSpeed = 3.0f;
 
 		// Translation
@@ -125,7 +141,7 @@ public class Hand : MonoBehaviour {
 				transform.Rotate (new Vector3 (0, -rotationSpeed, 0));
 			}
 		}
-			
+
 		// Pinch
 		if (Input.GetKey (commands [8])) {
 			if (!pinchIsPressed) {

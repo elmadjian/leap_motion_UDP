@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+enum State {Selectable, LeavingAtom, Attachable, RecentlyAttached}; 
+
 public class ConnectedAtom : MonoBehaviour {
 
 	public GameObject rhand;
@@ -12,11 +14,11 @@ public class ConnectedAtom : MonoBehaviour {
 	//public bool fixedAtom;
 	private float proximity;
 	private Behaviour halo;
-
+	private State state = State.Selectable;
 
 	// Use this for initialization
 	void Start () {
-		proximity = 3.8f;
+		proximity = 5f;
 		halo = (Behaviour)GetComponent ("Halo");
 		halo.enabled = false;
 		//connection.SetActive (false);
@@ -31,9 +33,13 @@ public class ConnectedAtom : MonoBehaviour {
 			halo.enabled = false;
 		}
 	}
-	
+
 	private bool Manipulate(GameObject hand) {
 		Transform ht = hand.GetComponent<Transform> ();
+
+		if (this.state == State.RecentlyAttached) {
+			return false;
+		}
 
 		//check distance
 		if (Vector3.Distance (ht.position, transform.position) < proximity) {
@@ -56,12 +62,43 @@ public class ConnectedAtom : MonoBehaviour {
 						connected = true;
 					}
 				}
-				if (!connected)
+
+				if (hstate.isMarkerBased) {
+					if (this.state == State.Selectable) {
+						if (connected) {
+							// Hand picked atom up while close to other attachable atoms
+							this.state = State.LeavingAtom;
+							print ("Selectable -> Leaving Atom");
+						} else {
+							// Hand picked atom up while far to other attachable atoms
+							this.state = State.Attachable;
+							print ("Selectable -> Attachable");
+						}
+					} else if (this.state == State.LeavingAtom) {
+						if (!connected) {
+							// If we got far enough away from previously attached atoms
+							this.state = State.Attachable;
+							print ("Leaving Atom -> Attachable");
+						}
+					} else if (this.state == State.Attachable) {
+						if (connected) {
+							// If we got close enough to new attachable atoms
+							this.state = State.RecentlyAttached;
+							print ("Attachable -> Recently Attached");
+							// attach the atom automatically
+							print ("Attaching!");
+							hstate.atom = null;
+						}
+					}
+				}
+
+				// No other connectable atoms are close
+				if (!connected) {
 					connection.SetActive (false);
+				}
 
-
-				//release the atom
 			} else {
+				//release the atom
 				hstate.atom = null;
 			}
 			return true;
