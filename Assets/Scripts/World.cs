@@ -24,6 +24,10 @@ public class World : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		if (rh.isMarkerBased || lh.isMarkerBased) {
+			return;
+		}
+
 		if (rh.pinch && lh.pinch && lh.atom == null && rh.atom == null) {
 			if (!start) {
 				direction = lht.position - rht.position;
