@@ -86,6 +86,18 @@ public class Network : MonoBehaviour {
 
 	private void LoadScene(string scene) {
 		switch(scene) {
+		case "s011": 
+			SceneManager.LoadSceneAsync ("t0_i1_c1"); 
+			break;
+		case "s012": 
+			SceneManager.LoadSceneAsync ("t0_i1_c2"); 
+			break;
+		case "s021": 
+			SceneManager.LoadSceneAsync ("t0_i2_c1"); 
+			break;
+		case "s022": 
+			SceneManager.LoadSceneAsync ("t0_i2_c2"); 
+			break;
 		case "s111": 
 			SceneManager.LoadSceneAsync ("t1_i1_c1"); 
 			break;
