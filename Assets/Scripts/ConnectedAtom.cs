@@ -18,7 +18,7 @@ public class ConnectedAtom : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		proximity = 2.0f;
+		proximity = 3f;
 		halo = (Behaviour)GetComponent ("Halo");
 		halo.enabled = false;
 		//connection.SetActive (false);
@@ -54,6 +54,7 @@ public class ConnectedAtom : MonoBehaviour {
 		}
 
 		//check distance
+		print(Vector3.Distance (ht.position, transform.position));
 		if (Vector3.Distance (ht.position, transform.position) < proximity) {
 			halo.enabled = true;
 			Hand hstate = hand.GetComponent<Hand> ();

@@ -14,7 +14,7 @@ public class Atom : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		proximity = 3.8f;
+		proximity = 3f;
 		halo = (Behaviour)GetComponent ("Halo");
 		halo.enabled = false;
 	}
