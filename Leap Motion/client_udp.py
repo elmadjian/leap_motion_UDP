@@ -23,13 +23,14 @@ class SampleListener(Leap.Listener):
         self.throughput = 0
         self.prev_lframe = None
         self.prev_rframe = None
+        self.pinch_confidence = 0
 
     def on_connect(self, controller):
         print "Motion sensor connected"
-        controller.enable_gesture(Leap.Gesture.TYPE_CIRCLE);
-        controller.enable_gesture(Leap.Gesture.TYPE_KEY_TAP);
-        controller.enable_gesture(Leap.Gesture.TYPE_SCREEN_TAP);
-        controller.enable_gesture(Leap.Gesture.TYPE_SWIPE);
+        # controller.enable_gesture(Leap.Gesture.TYPE_CIRCLE);
+        # controller.enable_gesture(Leap.Gesture.TYPE_KEY_TAP);
+        # controller.enable_gesture(Leap.Gesture.TYPE_SCREEN_TAP);
+        # controller.enable_gesture(Leap.Gesture.TYPE_SWIPE);
 
     def on_disconnect(self, controller):
         print "Motion sensor disconnected"
@@ -62,11 +63,17 @@ class SampleListener(Leap.Listener):
 
     def get_pinch_state(self, hand):
         if hand.pinch_strength > 0.7:
+            if self.pinch_confidence < self.throughput:
+                self.pinch_confidence += 1
+        else:
+            if self.pinch_confidence > 0:
+                self.pinch_confidence -= 1
+        if self.pinch_confidence != 0:
             return "true"
         return "false"
 
     def get_position(self, hand, ibox):
-        factor = 30.0
+        factor = 75.0
         point = hand.palm_position
         n = ibox.normalize_point(point)*factor
         p = [n.x-factor/2.0, n.y/2.0, -1*(n.z-factor/2.0)]
@@ -83,7 +90,7 @@ class SampleListener(Leap.Listener):
                 pinch    = self.get_pinch_state(hand)
                 tosend = htype+";"+position+";"+rotation+";"+pinch
                 self.throughput += 1
-                if self.throughput == 15:
+                if self.throughput == 5:
                     self.throughput = 0
                     self.socket.sendto(tosend.encode(), self.host)
                 if self.prev_lframe is None and hand.is_left:
@@ -100,17 +107,22 @@ def run(host):
     listener.set_socket(client_sock, server_address)
     controller = Leap.Controller()
     controller.add_listener(listener)
-    print "press Enter to quit"
-    try:
-        sys.stdin.readline()
-    except KeyboardInterrupt:
-        pass
-    finally:
-        controller.remove_listener(listener)
+    print "press 'q' to quit OR 's[0-9]{2-3}' to select a scene"
+    while True:
+        entry = sys.stdin.readline()
+        if entry.startswith('q'):
+            break
+        elif entry.startswith('s'):
+            tosend = 'scene;' + entry[:-1]
+            client_sock.sendto(tosend.encode(), server_address)
+    controller.remove_listener(listener)
 
 
 
 
 if __name__=="__main__":
+    if len(sys.argv) != 2:
+        print "usage: <this_program> <host_IP>"
+        sys.exit()
     host = sys.argv[1]
     run(host)

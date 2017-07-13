@@ -51,7 +51,7 @@ public class Network : MonoBehaviour {
 				receivedData = Encoding.ASCII.GetString (data, 0, data.Length);
 				//Debug.Log (receivedData);
 				if (receivedData != "") {
-					this.bufferCount = 10;
+					this.bufferCount = 100;
 					string[] rawdata = receivedData.Split (';');
 					if (rawdata [0] == "right")
 						this.rightHandData = rawdata;
