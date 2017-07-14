@@ -44,7 +44,7 @@ public class Network : MonoBehaviour {
 	}
 
 	private void ProcessConnection() {
-		this.bufferCount = 10;
+		this.bufferCount = 10000;
 		while (true) {
 			try {
 				data = socket.Receive (ref sender);
@@ -74,7 +74,7 @@ public class Network : MonoBehaviour {
 	// Update is called once per frame
 	void Update() {
 		rightHand.GetComponent<Hand> ().ParseData (rightHandData);
-		leftHand.GetComponent<Hand> ().ParseData (leftHandData);
+		//leftHand.GetComponent<Hand> ().ParseData (leftHandData);
 		if (sceneToLoad != "") {
 			string scene = sceneToLoad;
 			sceneToLoad = "";
