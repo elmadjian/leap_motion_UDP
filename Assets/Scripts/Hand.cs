@@ -98,6 +98,8 @@ public class Hand : MonoBehaviour {
 	void Update () {
 		float translationSpeed = 0.4f;
 		float rotationSpeed = 3.0f;
+		if (atom != null)
+			Debug.Log (atom.name);
 
 		// Translation
 		if (!Input.GetKey ("space")) {

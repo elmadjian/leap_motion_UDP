@@ -73,7 +73,7 @@ class SampleListener(Leap.Listener):
         return "false"
 
     def get_position(self, hand, ibox):
-        factor = 75.0
+        factor = 36.0
         point = hand.palm_position
         n = ibox.normalize_point(point)*factor
         p = [n.x-factor/2.0, n.y/2.0, -1*(n.z-factor/2.0)]

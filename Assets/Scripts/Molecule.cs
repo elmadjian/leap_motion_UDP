@@ -17,7 +17,7 @@ public class Molecule : MonoBehaviour {
 		rightPinch = false;
 		leftPinch = false;
 		selected = false;
-		proximity = 5.0f;
+		proximity = 5f;
 	}
 
 	// Update is called once per frame
